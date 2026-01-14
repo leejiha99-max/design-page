@@ -4,8 +4,150 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <link rel="stylesheet" href="./css/index.css">
+    
 </head>
 <body>
-    
+
+<div class="carousel-section">
+  <div class="title-poster"><h2>1st.POSTER</h2></div>
+  <div class="poster-wrap">
+    <div class="poster">
+      <img src="./poster/피부과포스터.jpg" alt="피부과 시술 홍보 포스터">
+      <img src="./poster/화장품포스터.jpg" alt="디올 파운데이션 포스터">
+      <img src="./poster/자유포스터1.jpg" alt="발레 전문 샵 포스터">
+      <img src="./poster/자유포스터3.jpg" alt="전시회 홍보 포스터">
+      <img src="./poster/옷블랙프라이데이.png" alt="실크 브랜드 블랙 프라이데이 포스터">
+      <img src="./poster/포스터2.jpg" alt="디저트 브랜드 포스터">
+    </div>
+  </div>
+</div>
+
+<div class="carousel-section">
+  <div class="title-poster"><h2>2nd.POP-UP</h2></div>
+  <div class="poster-wrap">
+    <div class="poster">
+      <!-- 같은 이미지 or 다른 이미지 -->
+      <img src="./popup/자유팝업1.jpg" alt="이지 갭 후드티 홍보 팝업">
+      <img src="./popup/자유팝업2.jpg" alt="신라호텔 예식장 그랜드 오픈 팝업">
+      <img src="./popup/블랙프라이데이팝업.jpg" alt="블랙 프라이데이 팝업">
+      <img src="./popup/블랙프라이데이팝업2.jpg" alt="블랙 프라이데이 팝업">
+      <img src="./popup/나이키2.jpg" alt="나이키 운동화 세일 팝업">
+      <img src="./popup/나이키3.jpg" alt="나이키 운동화 세일 팝업">
+      <img src="./popup/나이키5.jpg" alt="나이키 운동화 세일 팝업">
+    </div>
+  </div>
+</div>
+
+<div class="carousel-section">
+  <div class="title-poster"><h2>3rd.BANNER</h2></div>
+  <div class="poster-wrap">
+    <div class="poster">
+      <img src="./banner/나이키히어로배너1.jpg" alt="나이키 세일 배너">
+      <img src="./banner/아몽히어로배너디자인.jpg" alt="프리미엄 베이커리 카페 배너">
+      <img src="./banner/아몽히어로배너디자인2.jpg" alt="프리미엄 베이커리 카페 배너">
+      <img src="./banner/아몽히어로배너디자인4.jpg" alt="프리미엄 베이커리 카페 배너">
+    </div>
+  </div>
+</div>
+
+
+    <!--확대모달-->
+    <div class="modal hidden">
+        <div class="modal-img-wrap">
+            <img src="" alt="">
+            <div class="overlay">
+                <p></p>
+            </div>
+        </div>
+    </div>
+
+<script>
+window.addEventListener('load', () => {
+  const posters = document.querySelectorAll('.poster');
+
+  /* =====================
+     모달
+  ===================== */
+  const modal = document.querySelector('.modal');
+  const modalImg = modal.querySelector('.modal-img-wrap img');
+  const modalText = modal.querySelector('.overlay p');
+
+  modal.addEventListener('click', e => {
+    if (e.target === modal) modal.classList.add('hidden');
+  });
+
+  /* =====================
+     캐러셀
+  ===================== */
+  posters.forEach(poster => {
+    const originalImages = Array.from(poster.children);
+
+    // 무한루프용 복제 (1회만)
+    originalImages.forEach(img => {
+      poster.appendChild(img.cloneNode(true));
+    });
+
+    let isDragging = false;
+    let startX = 0;
+    let currentX = 0;
+
+    const gap = 20; // CSS gap 값과 반드시 동일
+    let loopWidth = 0;
+
+    // 🔥 "첫 번째 세트"의 실제 길이 계산
+    originalImages.forEach((img, index) => {
+      loopWidth += img.getBoundingClientRect().width;
+      if (index !== originalImages.length - 1) {
+        loopWidth += gap;
+      }
+    });
+
+    poster.querySelectorAll('img').forEach(img => {
+      img.addEventListener('click', () => {
+        if (isDragging) return;
+        modal.classList.remove('hidden');
+        modalImg.src = img.src;
+        modalText.textContent = img.alt;
+      });
+
+      img.addEventListener('mousedown', e => {
+        isDragging = true;
+        startX = e.clientX;
+      });
+    });
+
+    document.addEventListener('mousemove', e => {
+      if (!isDragging) return;
+      const delta = e.clientX - startX;
+      poster.style.transform = `translate3d(${currentX + delta}px, 0, 0)`;
+    });
+
+    document.addEventListener('mouseup', () => {
+      if (!isDragging) return;
+      isDragging = false;
+    });
+
+    function animate() {
+      if (!isDragging) {
+        currentX -= 0.8; // ⭐ 속도 조절
+
+        // ✅ 절대 "처음으로" 점프하지 않는 핵심
+        if (currentX <= -loopWidth) {
+          currentX += loopWidth;
+        }
+
+        poster.style.transform = `translate3d(${currentX}px, 0, 0)`;
+      }
+      requestAnimationFrame(animate);
+    }
+
+    animate();
+  });
+});
+</script>
+
+
+
 </body>
 </html>
