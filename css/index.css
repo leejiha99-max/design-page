@@ -96,9 +96,24 @@ body{
     .carousel-section>.title-poster>h2{
         font-size:50px;
     }
+    .poster img {
+    width: 210px;
+    height: auto;
+    cursor: pointer;
+    user-select: none;
+}
 }
 @media (max-width:768px){
     .carousel-section>.title-poster>h2{
         font-size: 35px;
     }
+    .poster img {
+    width: 140px;
+    height: auto;
+    cursor: pointer;
+    user-select: none;
+}
+.carousel-section:nth-of-type(3) .poster img {
+    width: 390px;
+}
 }
